@@ -17,7 +17,7 @@ def process_pages_request_hh(page, language, pages=1):
                    'per_page': 100,
                    'page': page,
                    'area': 1,
-                   'period': 5,
+                   'period': 20,
                    'specialization': 1
                    }
         response = requests.get(url_hh,
