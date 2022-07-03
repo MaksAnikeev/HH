@@ -35,7 +35,6 @@ def process_pages_request_hh(page, language, pages=1):
 
 
 if __name__ == '__main__':
-    programming_languages_rating = {}
     programming_languages = ['JavaScript', 'Java', 'Python', 'Ruby', 'PHP', 'C++', 'CSS', 'C#', 'Go', 'Shell']
 
     url = 'https://api.hh.ru/vacancies'

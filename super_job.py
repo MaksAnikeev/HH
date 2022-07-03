@@ -3,8 +3,10 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from salary_helper import (create_languages_rating, create_table_from_dict,
-                           predict_rub_salary, seach_salary_in_vacancy_sj)
+from salary_helper import (create_languages_rating,
+                           create_table_from_dict,
+                           predict_rub_salary,
+                           seach_salary_in_vacancy_sj)
 
 
 def process_pages_request_sj(page, language, pages=1):
