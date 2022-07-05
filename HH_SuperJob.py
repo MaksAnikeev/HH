@@ -25,16 +25,16 @@ def process_hh_pages_request(page, language):
                                 params=payload)
         response.raise_for_status()
         response_json = response.json()
-        pages = response_json['pages']
+        quantity_pages = response_json['pages']
         page += 1
         processed, salaries = predict_rub_salary(vacancies=response_json['items'],
                                                  function=seach_salary_in_vacancy_hh)
         full_vacancies_processed += processed
         full_average_salary += salaries
-        if page >= pages:
+        if page >= quantity_pages:
             break
     vacancies_found = response_json['found']
-    full_average_salary = full_average_salary / pages
+    full_average_salary = full_average_salary / quantity_pages
     return full_vacancies_processed, \
            full_average_salary, \
            vacancies_found
@@ -54,18 +54,18 @@ def process_sj_pages_request(page, language):
         response.raise_for_status()
         response_json = response.json()
         if response_json['total'] // payload['count'] > 0:
-            pages = response_json['total'] // payload['count']
+            quantity_pages = response_json['total'] // payload['count']
         else:
-            pages = 1
+            quantity_pages = 1
         page += 1
         processed, salaries = predict_rub_salary(vacancies=response_json['objects'],
                                                  function=seach_salary_in_vacancy_sj)
         full_vacancies_processed += processed
         full_average_salary += salaries
-        if page >= pages:
+        if page >= quantity_pages:
             break
     vacancies_found = response_json['total']
-    full_average_salary = full_average_salary / pages
+    full_average_salary = full_average_salary / quantity_pages
     return full_vacancies_processed, \
            full_average_salary, \
            vacancies_found
