@@ -9,9 +9,9 @@ from salary_helper import (create_languages_rating,
                            seach_salary_in_vacancy_hh,
                            seach_salary_in_vacancy_sj)
 
-def process_pages_request_hh(page, language, pages=1):
+def process_hh_pages_request(page, language, pages=1):
     full_vacancies_processed = 0
-    full_average_salaries = 0
+    full_average_salary = 0
     while page < pages:
         payload = {'text': f'Программист {language}',
                    'per_page': 100,
@@ -29,17 +29,17 @@ def process_pages_request_hh(page, language, pages=1):
         processed, salaries = predict_rub_salary(vacancies=response.json()['items'],
                                                  function=seach_salary_in_vacancy_hh)
         full_vacancies_processed += processed
-        full_average_salaries += salaries
+        full_average_salary += salaries
     vacancies_found = response.json()['found']
-    full_average_salaries = full_average_salaries / pages
+    full_average_salary = full_average_salary / pages
     return full_vacancies_processed, \
-           full_average_salaries, \
+           full_average_salary, \
            vacancies_found
 
 
-def process_pages_request_sj(page, language, pages=1):
+def process_sj_pages_request(page, language, pages=1):
     full_vacancies_processed = 0
-    full_average_salaries = 0
+    full_average_salary = 0
     while page < pages:
         payload = {'keyword': f'Программист {language}',
                    'count': 10,
@@ -57,11 +57,11 @@ def process_pages_request_sj(page, language, pages=1):
         processed, salaries = predict_rub_salary(vacancies=response.json()['objects'],
                                                  function=seach_salary_in_vacancy_sj)
         full_vacancies_processed += processed
-        full_average_salaries += salaries
+        full_average_salary += salaries
     vacancies_found = response.json()['total']
-    full_average_salaries = full_average_salaries / pages
+    full_average_salary = full_average_salary / pages
     return full_vacancies_processed, \
-           full_average_salaries, \
+           full_average_salary, \
            vacancies_found
 
 
@@ -77,11 +77,11 @@ if __name__ == '__main__':
     headers_hh = {'User-Agent': 'api-test-agent'}
 
     vacancy_dict_sj = create_languages_rating(programming_languages=programming_languages,
-                                           function=process_pages_request_sj)
+                                           function=process_sj_pages_request)
     create_table_from_dict(dict=vacancy_dict_sj,
                            title='SuperJob Moscow')
 
     vacancy_dict_hh = create_languages_rating(programming_languages=programming_languages,
-                                           function=process_pages_request_hh)
+                                           function=process_hh_pages_request)
     create_table_from_dict(dict=vacancy_dict_hh,
                            title='HeadHunter Moscow')

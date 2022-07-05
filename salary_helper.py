@@ -55,10 +55,10 @@ def create_languages_rating(programming_languages, function):
     programming_languages_rating = {}
     for language in programming_languages:
         programming_languages_rating[language] = {}
-        full_vacancies_processed, full_average_salaries, vacancies_found = function(page=0, language=language)
+        full_vacancies_processed, full_average_salary, vacancies_found = function(page=0, language=language)
         programming_languages_rating[language]["vacancies_found"] = vacancies_found
         programming_languages_rating[language]["vacancies_processed"] = full_vacancies_processed
-        programming_languages_rating[language]["average_salary"] = int(full_average_salaries)
+        programming_languages_rating[language]["average_salary"] = int(full_average_salary)
     return programming_languages_rating
 
 
