@@ -14,11 +14,11 @@ def process_hh_pages_request(page, language, pages=1):
     full_average_salary = 0
     while page < pages:
         payload = {'text': f'Программист {language}',
-                   'per_page': 100,
-                   'page': page,
-                   'area': 1,
-                   'period': 20,
-                   'specialization': 1
+                   'per_page': 100,                      # колличество вакансий на странице
+                   'page': page,                         # с какой страницы начать обработку (по умолчанию с 0)
+                   'area': 1,                            # область поиска Москва (для СПБ 2) https://api.hh.ru/areas
+                   'period': 20,                         # вакансии за последние 20 дней
+                   'specialization': 1                   # профессия ИТ
                    }
         response = requests.get(url_hh,
                                 headers=headers_hh,
@@ -42,10 +42,10 @@ def process_sj_pages_request(page, language, pages=1):
     full_average_salary = 0
     while page < pages:
         payload = {'keyword': f'Программист {language}',
-                   'count': 10,
-                   'page': page,
-                   'town': 4,
-                   'period': 30,
+                   'count': 10,                           # колличество вакансий на странице
+                   'page': page,                          # с какой страницы начать обработку (по умолчанию с 0)
+                   'town': 4,                             # область поиска Москва (для СПБ 14) 	https://api.superjob.ru/2.0/towns/
+                   'period': 0,                           # вакансии за весь доступный период (1 - за день, 7 за неделю)
                    }
         response = requests.get(url_sj, headers=headers_sj, params=payload)
         response.raise_for_status()
