@@ -82,12 +82,12 @@ if __name__ == '__main__':
     hh_url = 'https://api.hh.ru/vacancies'
     hh_headers = {'User-Agent': 'api-test-agent'}
 
-    sj_vacancy_dict = create_languages_rating(programming_languages=programming_languages,
+    sj_vacancies = create_languages_rating(programming_languages=programming_languages,
                                            function=process_sj_pages_request)
-    create_table_from_dict(dict=sj_vacancy_dict,
+    create_table_from_dict(dict=sj_vacancies,
                            title='SuperJob Moscow')
 
-    vacancy_dict_hh = create_languages_rating(programming_languages=programming_languages,
+    hh_vacancies = create_languages_rating(programming_languages=programming_languages,
                                            function=process_hh_pages_request)
-    create_table_from_dict(dict=vacancy_dict_hh,
+    create_table_from_dict(dict=hh_vacancies,
                            title='HeadHunter Moscow')
