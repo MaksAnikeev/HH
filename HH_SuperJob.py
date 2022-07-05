@@ -75,7 +75,7 @@ if __name__ == '__main__':
     programming_languages = ['JavaScript', 'Java', 'Python', 'Ruby', 'PHP', 'C++', 'CSS', 'C#', 'Go', 'Shell']
 
     load_dotenv()
-    super_job_key = os.environ['SECRET_KEY_SUPER_JOB']
+    super_job_key = os.environ['SUPER_JOB_SECRET_KEY']
     url_sj = 'https://api.superjob.ru/2.0/vacancies/'
     headers_sj = {'X-Api-App-Id': super_job_key}
 

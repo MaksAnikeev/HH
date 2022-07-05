@@ -77,7 +77,7 @@ pip install -r requirements.txt
 - Записать в этом файле полученный `Secret key`.
 
 ``` 
-SECRET_KEY_SUPER_JOB=...............................
+SUPER_JOB_SECRET_KEY=...............................
 ```
 
 ### Цель проекта
