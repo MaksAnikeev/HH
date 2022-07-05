@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from terminaltables import DoubleTable
 
 
@@ -5,7 +7,7 @@ def seach_salary_in_vacancy_hh(vacancy):
     if vacancy['salary']:
         if vacancy['salary']['currency'] == 'RUR':
             return calculate_salary(salary_from=vacancy['salary']['from'],
-                                   salary_to=vacancy['salary']['to'])
+                                    salary_to=vacancy['salary']['to'])
         else:
             return None
     else:
@@ -54,11 +56,11 @@ def predict_rub_salary(vacancies, function):
 def create_languages_rating(programming_languages, function):
     programming_languages_rating = {}
     for language in programming_languages:
-        programming_languages_rating[language] = {}
         full_vacancies_processed, full_average_salary, vacancies_found = function(page=0, language=language)
-        programming_languages_rating[language]["vacancies_found"] = vacancies_found
-        programming_languages_rating[language]["vacancies_processed"] = full_vacancies_processed
-        programming_languages_rating[language]["average_salary"] = int(full_average_salary)
+        programming_languages_rating[language] = {"vacancies_found": vacancies_found,
+                                                  "vacancies_processed": full_vacancies_processed,
+                                                  "average_salary": int(full_average_salary)
+                                                  }
     return programming_languages_rating
 
 
@@ -67,11 +69,12 @@ def create_table_from_dict(dict, title):
     final_table = []
     final_table.append(column_names)
     for key, value in dict.items():
-        strings = []
-        strings.append(key)
-        strings.append(value['average_salary'])
-        strings.append(value['vacancies_found'])
-        strings.append(value['vacancies_processed'])
+        strings = [key,
+                   value['average_salary'],
+                   value['vacancies_found'],
+                   value['vacancies_processed']
+                   ]
+
         final_table.append(strings)
 
     table = DoubleTable(final_table, title=title)
