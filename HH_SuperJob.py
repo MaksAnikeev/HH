@@ -9,10 +9,10 @@ from salary_helper import (create_languages_rating,
                            seach_salary_in_vacancy_hh,
                            seach_salary_in_vacancy_sj)
 
-def process_hh_pages_request(page, language, pages=1):
+def process_hh_pages_request(page, language):
     full_vacancies_processed = 0
     full_average_salary = 0
-    while page < pages:
+    while True:
         payload = {'text': f'Программист {language}',
                    'per_page': 100,                      # колличество вакансий на странице
                    'page': page,                         # с какой страницы начать обработку (по умолчанию с 0)
@@ -24,23 +24,26 @@ def process_hh_pages_request(page, language, pages=1):
                                 headers=headers_hh,
                                 params=payload)
         response.raise_for_status()
-        pages = response.json()['pages']
+        response_json = response.json()
+        pages = response_json['pages']
         page += 1
-        processed, salaries = predict_rub_salary(vacancies=response.json()['items'],
+        processed, salaries = predict_rub_salary(vacancies=response_json['items'],
                                                  function=seach_salary_in_vacancy_hh)
         full_vacancies_processed += processed
         full_average_salary += salaries
-    vacancies_found = response.json()['found']
+        if page >= pages:
+            break
+    vacancies_found = response_json['found']
     full_average_salary = full_average_salary / pages
     return full_vacancies_processed, \
            full_average_salary, \
            vacancies_found
 
 
-def process_sj_pages_request(page, language, pages=1):
+def process_sj_pages_request(page, language):
     full_vacancies_processed = 0
     full_average_salary = 0
-    while page < pages:
+    while True:
         payload = {'keyword': f'Программист {language}',
                    'count': 10,                           # колличество вакансий на странице
                    'page': page,                          # с какой страницы начать обработку (по умолчанию с 0)
@@ -49,16 +52,19 @@ def process_sj_pages_request(page, language, pages=1):
                    }
         response = requests.get(url_sj, headers=headers_sj, params=payload)
         response.raise_for_status()
-        if response.json()['total'] // payload['count'] > 0:
-            pages = response.json()['total'] // payload['count']
+        response_json = response.json()
+        if response_json['total'] // payload['count'] > 0:
+            pages = response_json['total'] // payload['count']
         else:
             pages = 1
         page += 1
-        processed, salaries = predict_rub_salary(vacancies=response.json()['objects'],
+        processed, salaries = predict_rub_salary(vacancies=response_json['objects'],
                                                  function=seach_salary_in_vacancy_sj)
         full_vacancies_processed += processed
         full_average_salary += salaries
-    vacancies_found = response.json()['total']
+        if page >= pages:
+            break
+    vacancies_found = response_json['total']
     full_average_salary = full_average_salary / pages
     return full_vacancies_processed, \
            full_average_salary, \
