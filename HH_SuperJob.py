@@ -20,8 +20,8 @@ def process_hh_pages_request(page, language):
                    'period': 20,                         # вакансии за последние 20 дней
                    'specialization': 1                   # профессия ИТ
                    }
-        response = requests.get(url_hh,
-                                headers=headers_hh,
+        response = requests.get(hh_url,
+                                headers=hh_headers,
                                 params=payload)
         response.raise_for_status()
         response_json = response.json()
@@ -50,7 +50,7 @@ def process_sj_pages_request(page, language):
                    'town': 4,                             # область поиска Москва (для СПБ 14) 	https://api.superjob.ru/2.0/towns/
                    'period': 0,                           # вакансии за весь доступный период (1 - за день, 7 за неделю)
                    }
-        response = requests.get(url_sj, headers=headers_sj, params=payload)
+        response = requests.get(sj_url, headers=sj_headers, params=payload)
         response.raise_for_status()
         response_json = response.json()
         if response_json['total'] // payload['count'] > 0:
@@ -76,15 +76,15 @@ if __name__ == '__main__':
 
     load_dotenv()
     super_job_key = os.environ['SUPER_JOB_SECRET_KEY']
-    url_sj = 'https://api.superjob.ru/2.0/vacancies/'
-    headers_sj = {'X-Api-App-Id': super_job_key}
+    sj_url = 'https://api.superjob.ru/2.0/vacancies/'
+    sj_headers = {'X-Api-App-Id': super_job_key}
 
-    url_hh = 'https://api.hh.ru/vacancies'
-    headers_hh = {'User-Agent': 'api-test-agent'}
+    hh_url = 'https://api.hh.ru/vacancies'
+    hh_headers = {'User-Agent': 'api-test-agent'}
 
-    vacancy_dict_sj = create_languages_rating(programming_languages=programming_languages,
+    sj_vacancy_dict = create_languages_rating(programming_languages=programming_languages,
                                            function=process_sj_pages_request)
-    create_table_from_dict(dict=vacancy_dict_sj,
+    create_table_from_dict(dict=sj_vacancy_dict,
                            title='SuperJob Moscow')
 
     vacancy_dict_hh = create_languages_rating(programming_languages=programming_languages,
