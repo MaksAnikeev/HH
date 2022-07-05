@@ -4,7 +4,7 @@ from terminaltables import DoubleTable
 def seach_salary_in_vacancy_hh(vacancy):
     if vacancy['salary']:
         if vacancy['salary']['currency'] == 'RUR':
-            return calculat_salary(salary_from=vacancy['salary']['from'],
+            return calculate_salary(salary_from=vacancy['salary']['from'],
                                    salary_to=vacancy['salary']['to'])
         else:
             return None
@@ -16,15 +16,15 @@ def seach_salary_in_vacancy_sj(vacancy):
     if vacancy['currency'] == 'rub':
         salary_from = vacancy['payment_from']
         salary_to = vacancy['payment_to']
-        if calculat_salary(salary_from, salary_to) == 0:
+        if calculate_salary(salary_from, salary_to) == 0:
             return None
         else:
-            return calculat_salary(salary_from, salary_to)
+            return calculate_salary(salary_from, salary_to)
     else:
         return None
 
 
-def calculat_salary(salary_from=None, salary_to=None):
+def calculate_salary(salary_from=None, salary_to=None):
     if salary_from and salary_to:
         average_salary = (salary_from + salary_to) / 2
     elif not salary_to or salary_to == 0:
