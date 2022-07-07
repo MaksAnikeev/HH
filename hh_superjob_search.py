@@ -17,7 +17,7 @@ def process_hh_pages_request(page, language):
                    'per_page': 100,                      # колличество вакансий на странице
                    'page': page,                         # с какой страницы начать обработку (по умолчанию с 0)
                    'area': 1,                            # область поиска Москва (для СПБ 2) https://api.hh.ru/areas
-                   'period': 20,                         # вакансии за последние 20 дней
+                   'period': 1,                         # вакансии за последние 20 дней
                    'specialization': 1                   # профессия ИТ
                    }
         response = requests.get(hh_url,
@@ -60,6 +60,7 @@ def process_sj_pages_request(page, language):
         page += 1
         processed, salaries = predict_rub_salary(vacancies=response_json['objects'],
                                                  function=seach_salary_in_vacancy_sj)
+        # print(processed, salaries)
         full_vacancies_processed += processed
         full_average_salary += salaries
         if page >= quantity_pages:

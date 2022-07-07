@@ -4,26 +4,22 @@ from terminaltables import DoubleTable
 
 
 def seach_salary_in_vacancy_hh(vacancy):
-    if vacancy['salary']:
-        if vacancy['salary']['currency'] == 'RUR':
-            return calculate_salary(salary_from=vacancy['salary']['from'],
+    if not vacancy['salary']:
+        return
+    if vacancy['salary']['currency'] != 'RUR':
+        return
+    return calculate_salary(salary_from=vacancy['salary']['from'],
                                     salary_to=vacancy['salary']['to'])
-        else:
-            return None
-    else:
-        return None
 
 
 def seach_salary_in_vacancy_sj(vacancy):
-    if vacancy['currency'] == 'rub':
-        salary_from = vacancy['payment_from']
-        salary_to = vacancy['payment_to']
-        if calculate_salary(salary_from, salary_to) == 0:
-            return None
-        else:
-            return calculate_salary(salary_from, salary_to)
-    else:
-        return None
+    salary_from = vacancy['payment_from']
+    salary_to = vacancy['payment_to']
+    if vacancy['currency'] != 'rub':
+        return
+    elif calculate_salary(salary_from, salary_to) != 0:
+        return calculate_salary(salary_from, salary_to)
+    return
 
 
 def calculate_salary(salary_from=None, salary_to=None):
