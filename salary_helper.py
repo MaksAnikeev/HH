@@ -34,13 +34,13 @@ def calculate_salary(salary_from=None, salary_to=None):
     return average_salary
 
 
-def predict_rub_salary(vacancies, function):
+def predict_rub_salary(vacancies, seach_salary_in_vacancy):
     vacancies_processed = 0
     average_salaries = 0
     for vacancy in vacancies:
-        if function(vacancy):
+        if seach_salary_in_vacancy(vacancy):
             vacancies_processed += 1
-            average_salary = function(vacancy)
+            average_salary = seach_salary_in_vacancy(vacancy)
             average_salaries += average_salary
     if vacancies_processed == 0:
         average_salaries = int(average_salaries / 1)
@@ -49,10 +49,10 @@ def predict_rub_salary(vacancies, function):
     return vacancies_processed, average_salaries
 
 
-def create_languages_rating(programming_languages, function):
+def create_languages_rating(programming_languages, process_pages_request):
     programming_languages_rating = {}
     for language in programming_languages:
-        full_vacancies_processed, full_average_salary, vacancies_found = function(page=0, language=language)
+        full_vacancies_processed, full_average_salary, vacancies_found = process_pages_request(page=0, language=language)
         programming_languages_rating[language] = {"vacancies_found": vacancies_found,
                                                   "vacancies_processed": full_vacancies_processed,
                                                   "average_salary": int(full_average_salary)

@@ -28,7 +28,7 @@ def process_hh_pages_request(page, language):
         quantity_pages = response_json['pages']
         page += 1
         processed, salaries = predict_rub_salary(vacancies=response_json['items'],
-                                                 function=seach_salary_in_vacancy_hh)
+                                                 seach_salary_in_vacancy=seach_salary_in_vacancy_hh)
         full_vacancies_processed += processed
         full_average_salary += salaries
         if page >= quantity_pages:
@@ -59,7 +59,7 @@ def process_sj_pages_request(page, language):
             quantity_pages = 1
         page += 1
         processed, salaries = predict_rub_salary(vacancies=response_json['objects'],
-                                                 function=seach_salary_in_vacancy_sj)
+                                                 seach_salary_in_vacancy=seach_salary_in_vacancy_sj)
         # print(processed, salaries)
         full_vacancies_processed += processed
         full_average_salary += salaries
@@ -84,11 +84,11 @@ if __name__ == '__main__':
     hh_headers = {'User-Agent': 'api-test-agent'}
 
     sj_vacancies = create_languages_rating(programming_languages=programming_languages,
-                                           function=process_sj_pages_request)
+                                           process_pages_request=process_sj_pages_request)
     create_table_from_dict(dict=sj_vacancies,
                            title='SuperJob Moscow')
 
     hh_vacancies = create_languages_rating(programming_languages=programming_languages,
-                                           function=process_hh_pages_request)
+                                           process_pages_request=process_hh_pages_request)
     create_table_from_dict(dict=hh_vacancies,
                            title='HeadHunter Moscow')
