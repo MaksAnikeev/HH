@@ -73,4 +73,4 @@ def create_table_from_dictionary(dictionary, title):
         final_table.append(rows)
 
     table = DoubleTable(final_table, title=title)
-    print(table.table)
+    return table.table

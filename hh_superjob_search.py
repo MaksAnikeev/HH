@@ -85,10 +85,10 @@ if __name__ == '__main__':
 
     sj_vacancies = create_languages_rating(programming_languages=programming_languages,
                                            process_pages_request=process_sj_pages_request)
-    create_table_from_dictionary(dictionary=sj_vacancies,
-                                 title='SuperJob Moscow')
+    print(create_table_from_dictionary(dictionary=sj_vacancies,
+                                 title='SuperJob Moscow'))
 
     hh_vacancies = create_languages_rating(programming_languages=programming_languages,
                                            process_pages_request=process_hh_pages_request)
-    create_table_from_dictionary(dictionary=hh_vacancies,
-                                 title='HeadHunter Moscow')
+    print(create_table_from_dictionary(dictionary=hh_vacancies,
+                                 title='HeadHunter Moscow'))
