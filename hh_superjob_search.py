@@ -4,21 +4,22 @@ import requests
 from dotenv import load_dotenv
 
 from salary_helper import (create_languages_rating,
-                           create_table_from_dict,
+                           create_table_from_dictionary,
                            predict_rub_salary,
                            seach_salary_in_vacancy_hh,
                            seach_salary_in_vacancy_sj)
+
 
 def process_hh_pages_request(page, language):
     full_vacancies_processed = 0
     full_average_salary = 0
     while True:
         payload = {'text': f'Программист {language}',
-                   'per_page': 100,                      # колличество вакансий на странице
-                   'page': page,                         # с какой страницы начать обработку (по умолчанию с 0)
-                   'area': 1,                            # область поиска Москва (для СПБ 2) https://api.hh.ru/areas
-                   'period': 1,                         # вакансии за последние 20 дней
-                   'specialization': 1                   # профессия ИТ
+                   'per_page': 100,  # колличество вакансий на странице
+                   'page': page,  # с какой страницы начать обработку (по умолчанию с 0)
+                   'area': 1,  # область поиска Москва (для СПБ 2) https://api.hh.ru/areas
+                   'period': 1,  # вакансии за последние 20 дней
+                   'specialization': 1  # профессия ИТ
                    }
         response = requests.get(hh_url,
                                 headers=hh_headers,
@@ -45,10 +46,10 @@ def process_sj_pages_request(page, language):
     full_average_salary = 0
     while True:
         payload = {'keyword': f'Программист {language}',
-                   'count': 10,                           # колличество вакансий на странице
-                   'page': page,                          # с какой страницы начать обработку (по умолчанию с 0)
-                   'town': 4,                             # область поиска Москва (для СПБ 14) 	https://api.superjob.ru/2.0/towns/
-                   'period': 0,                           # вакансии за весь доступный период (1 - за день, 7 за неделю)
+                   'count': 10,  # колличество вакансий на странице
+                   'page': page,  # с какой страницы начать обработку (по умолчанию с 0)
+                   'town': 4,  # область поиска Москва (для СПБ 14) 	https://api.superjob.ru/2.0/towns/
+                   'period': 0,  # вакансии за весь доступный период (1 - за день, 7 за неделю)
                    }
         response = requests.get(sj_url, headers=sj_headers, params=payload)
         response.raise_for_status()
@@ -60,7 +61,6 @@ def process_sj_pages_request(page, language):
         page += 1
         processed, salaries = predict_rub_salary(vacancies=response_json['objects'],
                                                  seach_salary_in_vacancy=seach_salary_in_vacancy_sj)
-        # print(processed, salaries)
         full_vacancies_processed += processed
         full_average_salary += salaries
         if page >= quantity_pages:
@@ -85,10 +85,10 @@ if __name__ == '__main__':
 
     sj_vacancies = create_languages_rating(programming_languages=programming_languages,
                                            process_pages_request=process_sj_pages_request)
-    create_table_from_dict(dict=sj_vacancies,
-                           title='SuperJob Moscow')
+    create_table_from_dictionary(dictionary=sj_vacancies,
+                                 title='SuperJob Moscow')
 
     hh_vacancies = create_languages_rating(programming_languages=programming_languages,
                                            process_pages_request=process_hh_pages_request)
-    create_table_from_dict(dict=hh_vacancies,
-                           title='HeadHunter Moscow')
+    create_table_from_dictionary(dictionary=hh_vacancies,
+                                 title='HeadHunter Moscow')

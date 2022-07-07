@@ -1,5 +1,3 @@
-from pprint import pprint
-
 from terminaltables import DoubleTable
 
 
@@ -9,7 +7,7 @@ def seach_salary_in_vacancy_hh(vacancy):
     if vacancy['salary']['currency'] != 'RUR':
         return
     return calculate_salary(salary_from=vacancy['salary']['from'],
-                                    salary_to=vacancy['salary']['to'])
+                            salary_to=vacancy['salary']['to'])
 
 
 def seach_salary_in_vacancy_sj(vacancy):
@@ -52,7 +50,8 @@ def predict_rub_salary(vacancies, seach_salary_in_vacancy):
 def create_languages_rating(programming_languages, process_pages_request):
     programming_languages_rating = {}
     for language in programming_languages:
-        full_vacancies_processed, full_average_salary, vacancies_found = process_pages_request(page=0, language=language)
+        full_vacancies_processed, full_average_salary, vacancies_found = process_pages_request(page=0,
+                                                                                               language=language)
         programming_languages_rating[language] = {"vacancies_found": vacancies_found,
                                                   "vacancies_processed": full_vacancies_processed,
                                                   "average_salary": int(full_average_salary)
@@ -60,18 +59,18 @@ def create_languages_rating(programming_languages, process_pages_request):
     return programming_languages_rating
 
 
-def create_table_from_dict(dict, title):
+def create_table_from_dictionary(dictionary, title):
     column_names = ['Язык программирования', 'Средняя зарплата', 'Вакансий найдено', 'Вакансий обработано']
     final_table = []
     final_table.append(column_names)
-    for key, value in dict.items():
-        strings = [key,
-                   value['average_salary'],
-                   value['vacancies_found'],
-                   value['vacancies_processed']
-                   ]
+    for key, value in dictionary.items():
+        rows = [key,
+                value['average_salary'],
+                value['vacancies_found'],
+                value['vacancies_processed']
+                ]
 
-        final_table.append(strings)
+        final_table.append(rows)
 
     table = DoubleTable(final_table, title=title)
     print(table.table)
