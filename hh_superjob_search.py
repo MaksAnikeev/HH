@@ -26,16 +26,16 @@ def process_hh_pages_request(page, language):
                                 params=payload)
         response.raise_for_status()
         response_json = response.json()
-        quantity_pages = response_json['pages']
+        pages_quantity = response_json['pages']
         page += 1
         processed, salaries = predict_rub_salary(vacancies=response_json['items'],
                                                  seach_salary_in_vacancy=seach_salary_in_vacancy_hh)
         full_vacancies_processed += processed
         full_average_salary += salaries
-        if page >= quantity_pages:
+        if page >= pages_quantity:
             break
     vacancies_found = response_json['found']
-    full_average_salary = full_average_salary / quantity_pages
+    full_average_salary = full_average_salary / pages_quantity
     return full_vacancies_processed, \
            full_average_salary, \
            vacancies_found
@@ -55,18 +55,18 @@ def process_sj_pages_request(page, language):
         response.raise_for_status()
         response_json = response.json()
         if response_json['total'] // payload['count'] > 0:
-            quantity_pages = response_json['total'] // payload['count']
+            pages_quantity = response_json['total'] // payload['count']
         else:
-            quantity_pages = 1
+            pages_quantity = 1
         page += 1
         processed, salaries = predict_rub_salary(vacancies=response_json['objects'],
                                                  seach_salary_in_vacancy=seach_salary_in_vacancy_sj)
         full_vacancies_processed += processed
         full_average_salary += salaries
-        if page >= quantity_pages:
+        if page >= pages_quantity:
             break
     vacancies_found = response_json['total']
-    full_average_salary = full_average_salary / quantity_pages
+    full_average_salary = full_average_salary / pages_quantity
     return full_vacancies_processed, \
            full_average_salary, \
            vacancies_found
@@ -86,9 +86,9 @@ if __name__ == '__main__':
     sj_vacancies = create_languages_rating(programming_languages=programming_languages,
                                            process_pages_request=process_sj_pages_request)
     print(create_table_from_dictionary(dictionary=sj_vacancies,
-                                 title='SuperJob Moscow'))
+                                       title='SuperJob Moscow'))
 
     hh_vacancies = create_languages_rating(programming_languages=programming_languages,
                                            process_pages_request=process_hh_pages_request)
     print(create_table_from_dictionary(dictionary=hh_vacancies,
-                                 title='HeadHunter Moscow'))
+                                       title='HeadHunter Moscow'))
