@@ -13,10 +13,11 @@ def seach_salary_in_vacancy_hh(vacancy):
 def seach_salary_in_vacancy_sj(vacancy):
     salary_from = vacancy['payment_from']
     salary_to = vacancy['payment_to']
+    average_salary = calculate_salary(salary_from, salary_to)
     if vacancy['currency'] != 'rub':
         return
-    elif calculate_salary(salary_from, salary_to) != 0:
-        return calculate_salary(salary_from, salary_to)
+    elif average_salary != 0:
+        return average_salary
     return
 
 
@@ -36,9 +37,9 @@ def predict_rub_salary(vacancies, seach_salary_in_vacancy):
     vacancies_processed = 0
     average_salaries = 0
     for vacancy in vacancies:
-        if seach_salary_in_vacancy(vacancy):
+        average_salary = seach_salary_in_vacancy(vacancy)
+        if average_salary:
             vacancies_processed += 1
-            average_salary = seach_salary_in_vacancy(vacancy)
             average_salaries += average_salary
     if vacancies_processed == 0:
         average_salaries = int(average_salaries / 1)
