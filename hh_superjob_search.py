@@ -25,16 +25,16 @@ def process_hh_pages_request(page, language):
                                 headers=hh_headers,
                                 params=payload)
         response.raise_for_status()
-        response_data_structure = response.json()
-        pages_quantity = response_data_structure['pages']
+        vacancies_page = response.json()
+        pages_quantity = vacancies_page['pages']
         page += 1
-        processed, salaries = predict_rub_salary(vacancies=response_data_structure['items'],
+        processed, salaries = predict_rub_salary(vacancies=vacancies_page['items'],
                                                  seach_salary_in_vacancy=seach_salary_in_vacancy_hh)
         full_vacancies_processed += processed
         full_average_salary += salaries
         if page >= pages_quantity:
             break
-    vacancies_found = response_data_structure['found']
+    vacancies_found = vacancies_page['found']
     full_average_salary = full_average_salary / pages_quantity
     return full_vacancies_processed, \
            full_average_salary, \
@@ -53,19 +53,19 @@ def process_sj_pages_request(page, language):
                    }
         response = requests.get(sj_url, headers=sj_headers, params=payload)
         response.raise_for_status()
-        response_data_structure = response.json()
-        if response_data_structure['total'] // payload['count'] > 0:
-            pages_quantity = response_data_structure['total'] // payload['count']
+        vacancies_page = response.json()
+        if vacancies_page['total'] // payload['count'] > 0:
+            pages_quantity = vacancies_page['total'] // payload['count']
         else:
             pages_quantity = 1
         page += 1
-        processed, salaries = predict_rub_salary(vacancies=response_data_structure['objects'],
+        processed, salaries = predict_rub_salary(vacancies=vacancies_page['objects'],
                                                  seach_salary_in_vacancy=seach_salary_in_vacancy_sj)
         full_vacancies_processed += processed
         full_average_salary += salaries
         if page >= pages_quantity:
             break
-    vacancies_found = response_data_structure['total']
+    vacancies_found = vacancies_page['total']
     full_average_salary = full_average_salary / pages_quantity
     return full_vacancies_processed, \
            full_average_salary, \
